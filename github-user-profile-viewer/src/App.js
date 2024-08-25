@@ -3,6 +3,7 @@ import axios from "axios";
 import UserProfile from "./components/UserProfile";
 import RepositoryList from "./components/RepositoryList";
 import StarredList from "./components/StarredList";
+import UserStats from "./components/UserStats";
 import "./App.css";
 
 function App() {
@@ -41,7 +42,12 @@ function App() {
           Fetch User
         </button>
       </div>
-      {user && <UserProfile user={user} />}
+      {user && (
+        <>
+          <UserProfile user={user} />
+          <UserStats user={user} />
+        </>
+      )}
       {repositories.length > 0 && (
         <RepositoryList repositories={repositories} />
       )}
