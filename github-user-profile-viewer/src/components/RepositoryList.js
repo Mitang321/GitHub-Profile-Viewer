@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./RepositoryList.css";
+import RepositoryDetailsModal from "./RepositoryDetailsModal.js";
 
 function RepositoryList({ repositories }) {
   const [sortOption, setSortOption] = useState("name-asc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRepo, setSelectedRepo] = useState(null);
   const itemsPerPage = 5;
 
   const handleSortChange = (event) => {
@@ -27,13 +29,20 @@ function RepositoryList({ repositories }) {
     setCurrentPage(pageNumber);
   };
 
+  const handleRepoClick = (repo) => {
+    setSelectedRepo(repo);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedRepo(null);
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedRepositories.slice(
+  const currentRepos = sortedRepositories.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
-  const totalPages = Math.ceil(sortedRepositories.length / itemsPerPage);
 
   return (
     <div className="repository-list">
@@ -48,23 +57,23 @@ function RepositoryList({ repositories }) {
         </select>
       </div>
       <ul>
-        {currentItems.map((repo) => (
+        {currentRepos.map((repo) => (
           <li key={repo.id} className="repository-item">
-            <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-              <div className="repo-details">
-                <h3>{repo.name}</h3>
-                <p>{repo.description || "No description"}</p>
-              </div>
-              <div className="repo-meta">
-                <span className="repo-language">{repo.language}</span>
-                <span className="repo-stars">⭐ {repo.stargazers_count}</span>
-              </div>
-            </a>
+            <div onClick={() => handleRepoClick(repo)} className="repo-details">
+              <h3>{repo.name}</h3>
+              <p>{repo.description || "No description"}</p>
+            </div>
+            <div className="repo-meta">
+              <span className="repo-language">{repo.language}</span>
+              <span className="repo-stars">⭐ {repo.stargazers_count}</span>
+            </div>
           </li>
         ))}
       </ul>
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, index) => (
+        {Array.from({
+          length: Math.ceil(repositories.length / itemsPerPage),
+        }).map((_, index) => (
           <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
@@ -74,6 +83,12 @@ function RepositoryList({ repositories }) {
           </button>
         ))}
       </div>
+      {selectedRepo && (
+        <RepositoryDetailsModal
+          repo={selectedRepo}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }
