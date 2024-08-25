@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
 import UserProfile from "./components/UserProfile";
+import RepositoryList from "./components/RepositoryList";
 import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [repositories, setRepositories] = useState([]);
   const [username, setUsername] = useState("");
 
   const fetchUserData = () => {
     axios
       .get(`https://api.github.com/users/${username}`)
-      .then((response) => setUser(response.data))
+      .then((response) => {
+        setUser(response.data);
+        return axios.get(response.data.repos_url);
+      })
+      .then((response) => setRepositories(response.data))
       .catch((error) => console.error(error));
   };
 
@@ -32,6 +38,9 @@ function App() {
         </button>
       </div>
       {user && <UserProfile user={user} />}
+      {repositories.length > 0 && (
+        <RepositoryList repositories={repositories} />
+      )}
     </div>
   );
 }
