@@ -4,12 +4,12 @@ import "./RepositoryDetailsModal.css";
 function RepositoryDetailsModal({ repo, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content show" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>
           &times;
         </button>
         <h2>{repo.name}</h2>
-        <p>{repo.description || "No description"}</p>
+        <p>{repo.description || "No description available"}</p>
         <ul>
           <li>
             <strong>Created at:</strong>{" "}
