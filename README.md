@@ -2,6 +2,11 @@
 
 A React application that allows users to view detailed information about GitHub profiles, including repositories, starred items.
 
+## Live Preview
+
+[Live Preview](https://git-hub-profile-viewer-five.vercel.app/)
+
+
 ## Features
 
 - **User Profile Display**: Shows user avatar, name, bio, and location.
